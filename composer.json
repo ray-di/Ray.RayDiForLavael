@@ -29,7 +29,7 @@
     },
     "require-dev": {
         "laravel/framework": "^8.83 || ^9.8 || ^10.0 || ^11.0",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5.10"
     },
     "suggest": {
       "ext-apcu": "Needed to use ApcuCacheProvider"
