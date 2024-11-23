@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         php: [8.0, 8.1, 8.2, 8.3, 8.4]
-        laravel: [8, 9, 10, 11]
+        laravel: [8.83, 9, 10, 11]
         dependency: [lowest, highest]
         os: [ubuntu-latest]
         exclude:
@@ -52,15 +52,15 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Set Laravel
+        run: composer require --dev laravel/framework:^${{ matrix.laravel }} --no-interaction --no-update
+
       - name: Handle lowest dependencies update
         if: contains(matrix.dependency, 'lowest')
         run: echo COMPOSER_UPDATE_FLAGS=$COMPOSER_UPDATE_FLAGS --prefer-lowest >> $GITHUB_ENV
 
       - name: Update dependencies
         run: composer update ${{ env.COMPOSER_UPDATE_FLAGS }} ${{ env.COMPOSER_FLAGS }}
-
-      - name: Update laravel
-        run: composer update ${{ env.COMPOSER_UPDATE_FLAGS }} ${{ env.COMPOSER_FLAGS }} -W laravel/framework:^${{ matrix.laravel }}
 
       - name: Run test suite
         run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
